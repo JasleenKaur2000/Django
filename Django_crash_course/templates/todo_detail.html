@@ -11,15 +11,10 @@
     {% else %}
     <div>Hello Anonymous</div>
     {% endif %}
-
-    <a href="/create">Create a todo</a>
-
-    <ul>
-      {% for todo in todo_list %}
-      <li>
-        <a href="/{{ todo.id }}">{{ todo.name}}</a>,it's due {{todo.due_date}}
-      </li>
-      {% endfor %}
-    </ul>
+    <div>
+      The todo name is :{{todo.name}} The due date is :{{todo.due_date}}
+    </div>
+    <a href="/{{todo.id}}/update">Update this todo</a>
+    <a href="/{{todo.id}}/delete">Delete this todo</a>
   </body>
 </html>
