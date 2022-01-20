@@ -1,25 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Django Crash Course</title>
-  </head>
-  <body>
+{% extends "base.html" %} {% block content %}
+<div class="text-center">
+  <h4>
     {% if is_user_logged_in %}
     <div>Hello {{username}}</div>
     {% else %}
     <div>Hello Anonymous</div>
     {% endif %}
+  </h4>
+  <a class="btn btn-primary" href="/create">Create a todo</a>
+</div>
 
-    <a href="/create">Create a todo</a>
+<div class="col-4 offset-4">
+  {% for todo in todo_list %}
+  <div class="card mt-3">
+    <div class="card-header">
+      <a href="/{{ todo.id }}"><h4>{{ todo.name}}</h4></a>
+    </div>
+    <div class="card-body">
+      <p>It's due {{todo.due_date}}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 
-    <ul>
-      {% for todo in todo_list %}
-      <li>
-        <a href="/{{ todo.id }}">{{ todo.name}}</a>,it's due {{todo.due_date}}
-      </li>
-      {% endfor %}
-    </ul>
-  </body>
-</html>
+{% endblock content %}
