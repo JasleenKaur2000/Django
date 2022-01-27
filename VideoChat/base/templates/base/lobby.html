@@ -19,7 +19,7 @@
 
     let handleSubmit = async (e) => {
       e.preventDefault();
-      window.open("/room", "_self");
+      window.open("/room", "_self"); <!--"_self makes sure that the tab is not changed when we are redirected to rooms page "-->
     };
 
     form.addEventListener("submit", handleSubmit);
