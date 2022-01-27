@@ -4,14 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DjCRM</title>
+    <style>
+      .lead {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 6px;
+        padding-right: 6px;
+        background-color: aliceblue;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <h1>Hello World</h1>
-    <p>Here is our custom HTML template.</p>
-    <ul>
-      {% for lead in leads %}
-      <li>{{lead}}</li>
-      {% endfor %}
-    </ul>
+    <h1>This is all our leads.</h1>
+    {% for lead in leads %}
+    <div class="lead">
+      {{lead.first_name}} {{lead.last_name}}.Age:{{lead.age}}
+    </div>
+    {% endfor %}
   </body>
 </html>
