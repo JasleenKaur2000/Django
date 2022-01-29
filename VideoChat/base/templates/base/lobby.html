@@ -12,6 +12,7 @@
         <div class="form-field">
           <label>Room:</label>
           <input
+            type="text"
             name="room"
             placeholder="Enter a room name..."
             style="text-transform: uppercase"
@@ -21,7 +22,8 @@
         <div class="form-field">
           <label>Name:</label>
           <input
-            name="name"
+            type="text"
+            name="username"
             placeholder="Enter your name..."
             style="text-transform: uppercase"
           />
@@ -40,7 +42,7 @@
     let handleSubmit = async (e) => {
       e.preventDefault();
       let room = e.target.room.value.toUpperCase();
-      let name = e.target.name.value;
+      let name = e.target.username.value;
 
       let response = await fetch(`/getToken/?channel=${room}`);
       let data = await response.json();
