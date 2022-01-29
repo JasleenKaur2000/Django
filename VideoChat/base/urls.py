@@ -4,5 +4,5 @@ from . import views
 urlpatterns=[
     path('',views.lobby),
     path('room/',views.room),
-    path('gettoken/',views.getToken),
+    path('getToken/',views.getToken),
 ]

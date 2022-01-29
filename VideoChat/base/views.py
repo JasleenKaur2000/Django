@@ -4,7 +4,6 @@ import random
 import time
 from agora_token_builder import RtcTokenBuilder
 
-
 # Create your views here.
 def lobby(request):
     return render(request,'base/lobby.html')
