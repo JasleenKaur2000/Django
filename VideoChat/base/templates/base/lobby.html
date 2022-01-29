@@ -8,11 +8,21 @@
       <p>Your solution to a group video chat</p>
     </div>
     <form id="form">
-      <div>
-        <div>
+      <div class="field-wrapper">
+        <div class="form-field">
+          <label>Room:</label>
           <input
             name="room"
             placeholder="Enter a room name..."
+            style="text-transform: uppercase"
+          />
+        </div>
+
+        <div class="form-field">
+          <label>Name:</label>
+          <input
+            name="name"
+            placeholder="Enter your name..."
             style="text-transform: uppercase"
           />
         </div>
@@ -30,6 +40,7 @@
     let handleSubmit = async (e) => {
       e.preventDefault();
       let room = e.target.room.value.toUpperCase();
+      let name = e.target.name.value;
 
       let response = await fetch(`/getToken/?channel=${room}`);
       let data = await response.json();
@@ -40,6 +51,8 @@
       sessionStorage.setItem("UID", UID);
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("room", room);
+      sessionStorage.setItem("name", name);
+
       window.open("/room", "_self");
     };
 
