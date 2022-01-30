@@ -12,11 +12,12 @@ let remoteUsers = {};
 
 let joinAndDisplayLocalStream = async () => {
   document.getElementById("room-name").innerText = CHANNEL;
+
   client.on("user-published", handleUserJoined);
-  client.on("user-leave", handleUserLeft);
+  client.on("user-left", handleUserLeft);
 
   try {
-    await client.join(APP_ID, CHANNEL, TOKEN, UID);
+    UID = await client.join(APP_ID, CHANNEL, TOKEN, UID);
   } catch (error) {
     console.error(error);
     window.open("/", "_self");
@@ -26,15 +27,15 @@ let joinAndDisplayLocalStream = async () => {
 
   let member = await createMember();
 
-  let player = `<div class="video-container" id="user-container-${UID}">
-    <div class="username-wrapper"><span class="user-name">${member.name}</span></div>
-    <div class="video-player" id="user-${UID}"></div>
-  </div>`;
+  let player = `<div  class="video-container" id="user-container-${UID}">
+                     <div class="video-player" id="user-${UID}"></div>
+                     <div class="username-wrapper"><span class="user-name">${member.name}</span></div>
+                  </div>`;
+
   document
     .getElementById("video-streams")
     .insertAdjacentHTML("beforeend", player);
   localTracks[1].play(`user-${UID}`);
-
   await client.publish([localTracks[0], localTracks[1]]);
 };
 
@@ -42,24 +43,26 @@ let handleUserJoined = async (user, mediaType) => {
   remoteUsers[user.uid] = user;
   await client.subscribe(user, mediaType);
 
-  if (mediaType == "video") {
+  if (mediaType === "video") {
     let player = document.getElementById(`user-container-${user.uid}`);
     if (player != null) {
       player.remove();
     }
 
-    let member = await getMember();
+    let member = await getMember(user);
 
-    player = `<div class="video-container" id="user-container-${user.uid}">
-    <div class="username-wrapper"><span class="user-name">${member.name}</span></div>
-    <div class="video-player" id="user-${user.uid}"></div>
-  </div>`;
+    player = `<div  class="video-container" id="user-container-${user.uid}">
+            <div class="video-player" id="user-${user.uid}"></div>
+            <div class="username-wrapper"><span class="user-name">${member.name}</span></div>
+        </div>`;
+
     document
       .getElementById("video-streams")
       .insertAdjacentHTML("beforeend", player);
     user.videoTrack.play(`user-${user.uid}`);
   }
-  if (mediaType == "audio") {
+
+  if (mediaType === "audio") {
     user.audioTrack.play();
   }
 };
@@ -74,8 +77,10 @@ let leaveAndRemoveLocalStream = async () => {
     localTracks[i].stop();
     localTracks[i].close();
   }
-  deleteMember();
+
   await client.leave();
+  //This is somewhat of an issue because if user leaves without actaull pressing leave button, it will not trigger
+  deleteMember();
   window.open("/", "_self");
 };
 
@@ -102,7 +107,7 @@ let toggleMic = async (e) => {
 };
 
 let createMember = async () => {
-  let response = await fetch("/create_member/", {
+  let response = await fetch(`/create_member/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -133,6 +138,7 @@ let deleteMember = async () => {
 };
 
 window.addEventListener("beforeunload", deleteMember);
+
 joinAndDisplayLocalStream();
 
 document
